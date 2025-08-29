@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  neo4j:
+    image: neo4j:5-community
+    container_name: rizoma-neo4j
+    ports:
+      - "7474:7474" # Interface Web do Neo4j
+      - "7687:7687" # Porta Bolt para os serviços conectarem
+    volumes:
+      - ./neo4j_data:/data
+    environment:
+      - NEO4J_AUTH=neo4j/senha_foda_muda_isso
+    restart: unless-stopped
+  mongodb:
+    image: mongo:latest
+    container_name: rizoma-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGO_INITDB_ROOT_PASSWORD=senha_secreta_aqui
+    restart: unless-stopped
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rizoma-rabbitmq
+    ports:
+      - "5672:5672"   # Porta para os serviços conectarem
+      - "15672:15672" # Interface Web de Gerenciamento
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    restart: unless-stopped
